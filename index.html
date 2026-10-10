@@ -107,6 +107,36 @@
             box-shadow: 0 0 20px -3px var(--brand-color);
         }
     </style>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getFirestore, collection, addDoc, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        // Cấu hình Firebase của riêng bạn
+        const firebaseConfig = {
+            apiKey: "AIzaSyAaVKuymc7EtJ28l4rPkowKYOS4TQgKR8",
+            authDomain: "zixii-63555.firebaseapp.com",
+            projectId: "zixii-63555",
+            storageBucket: "zixii-63555.firebasestorage.app",
+            messagingSenderId: "960197116823",
+            appId: "1:960197116823:web:d83d50e6b0b1589cfad2",
+            measurementId: "G-EGXKFSD8TS"
+        };
+
+        // Khởi tạo Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // Đưa các công cụ Firestore ra ngoài để trang web dùng chung
+        window.db = db;
+        window.collection = collection;
+        window.addDoc = addDoc;
+        window.getDocs = getDocs;
+        window.query = query;
+        window.orderBy = orderBy;
+
+        // Báo hiệu Firebase đã sẵn sàng kết nối
+        window.dispatchEvent(new Event('firebase-ready'));
+    </script>
 </head>
 <body class="bg-slate-100 dark:bg-slate-950 text-slate-900 dark:text-slate-100 min-h-screen flex flex-col pb-20 md:pb-0">
 
@@ -953,6 +983,15 @@
             document.body.appendChild(toast);
             setTimeout(() => toast.remove(), 2800);
         }
+        // Lắng nghe sự kiện Firebase sẵn sàng để load dữ liệu lên giao diện
+        window.addEventListener('firebase-ready', async function() {
+            if (typeof checkAuthSession === 'function') {
+                checkAuthSession();
+            }
+            if (typeof loadFilesFromFirebase === 'function') {
+                await loadFilesFromFirebase();
+            }
+        });
     </script>
 </body>
 </html>
