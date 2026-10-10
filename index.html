@@ -629,39 +629,36 @@
         }
 
         async function processUpload() {
-            if (stagedFiles.length === 0) return;
-            const selectedCat = document.getElementById('uploadCategorySelect').value;
-            const now = new Date();
-            const dateStr = `${String(now.getDate()).padStart(2, '0')}/${String(now.getMonth() + 1).padStart(2, '0')}/${now.getFullYear()} ${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+    if (stagedFiles.length === 0) return;
+    const selectedCat = document.getElementById('uploadCategorySelect').value;
+    const now = new Date();
+    const dateStr = `${String(now.getDate()).padStart(2, '0')}/${String(now.getMonth() + 1).padStart(2, '0')}/${now.getFullYear()} ${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
 
-            for (const file of stagedFiles) {
-                let fType = selectedCat;
-                if (file.type.startsWith('image/') && selectedCat !== 'image') fType = 'image';
+    for (const file of stagedFiles) {
+        let fType = selectedCat;
+        if (file.type.startsWith('image/') && selectedCat !== 'image') fType = 'image';
 
-                // Convert file data to Base64 data URL for persistence
-                const reader = new FileReader();
-                reader.onload = async function(e) {
-                    const fileObj = {
-                        name: file.name,
-                        type: fType,
-                        size: formatBytes(file.size),
-                        date: dateStr,
-                        timestamp: Date.now(),
-                        dataUrl: fType === 'image' ? e.target.result : '',
-                        content: `Tệp: ${file.name}\nPhân loại: ${fType.toUpperCase()}\nUpload lúc: ${dateStr}`
-                    };
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const fileObj = {
+                id: 'file_' + Date.now() + '_' + Math.random().toString(36).substr(2, 4),
+                name: file.name,
+                type: fType,
+                size: formatBytes(file.size),
+                date: dateStr,
+                uploader: currentUser || 'guest',
+                dataUrl: e.target.result // <--- LUÔN LƯU DỮ LIỆU TẤT CẢ CÁC FILE ĐỂ CÓ THỂ TẢI VỀ
+            };
+            filesList.unshift(fileObj);
+            saveFilesToStorage(); // Hàm này sẽ tự động lưu vào localStorage và gọi renderFiles()
+        };
+        reader.readAsDataURL(file);
+    }
 
-                    if (window.saveFileToFirebase) {
-                        await window.saveFileToFirebase(fileObj);
-                    }
-                };
-                reader.readAsDataURL(file);
-            }
-
-            stagedFiles = [];
-            closeUploadModal();
-            showNotification('Đã tải tệp lên cloud!');
-        }
+    stagedFiles = [];
+    closeUploadModal();
+    showNotification('Đã tải lên file thành công!');
+}
 
         function renderFiles() {
             const files = window.getFilesList ? window.getFilesList() : [];
