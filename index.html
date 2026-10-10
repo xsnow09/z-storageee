@@ -1,0 +1,961 @@
+<!DOCTYPE html>
+<html lang="vi" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Z Storage - Premium Glass Cloud</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            DEFAULT: 'var(--brand-color, #8b5cf6)',
+                            hover: 'var(--brand-hover, #7c3aed)',
+                            light: 'var(--brand-light, #10b981)',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts including Pixel Fonts -->
+    <link id="font-link" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Be+Vietnam+Pro:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@400;600;700&family=Press+Start+2P&family=Silkscreen:wght@400;700&family=VT323&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --brand-color: #8b5cf6;
+            --brand-hover: #7c3aed;
+            --font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            font-family: var(--font-family);
+            transition: background-color 0.3s ease, color 0.3s ease;
+            -webkit-tap-highlight-color: transparent;
+            overflow-x: hidden;
+        }
+
+        /* LIGHT MODE GLASS EFFECTS */
+        html:not(.dark) .glass-panel {
+            background: rgba(255, 255, 255, 0.78);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.9);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.07);
+        }
+
+        html:not(.dark) .glass-card {
+            background: rgba(255, 255, 255, 0.65);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            box-shadow: 0 4px 16px 0 rgba(31, 38, 135, 0.04);
+        }
+
+        html:not(.dark) .glass-card:hover {
+            background: rgba(255, 255, 255, 0.9);
+            border-color: var(--brand-color);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 0 12px var(--brand-color);
+        }
+
+        /* DARK MODE GLASS EFFECTS */
+        html.dark .glass-panel {
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(20px) saturate(160%);
+            -webkit-backdrop-filter: blur(20px) saturate(160%);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
+        }
+
+        html.dark .glass-card {
+            background: rgba(30, 41, 59, 0.6);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.25);
+        }
+
+        html.dark .glass-card:hover {
+            background: rgba(30, 41, 59, 0.9);
+            border-color: var(--brand-color);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5), 0 0 18px rgba(139, 92, 246, 0.3);
+        }
+
+        /* Custom Scrollbars */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(156, 163, 175, 0.4);
+            border-radius: 9999px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--brand-color);
+        }
+
+        .brand-glow {
+            box-shadow: 0 0 20px -3px var(--brand-color);
+        }
+    </style>
+</head>
+<body class="bg-slate-100 dark:bg-slate-950 text-slate-900 dark:text-slate-100 min-h-screen flex flex-col pb-20 md:pb-0">
+
+    <header class="sticky top-0 z-40 w-full glass-panel border-b px-4 lg:px-8 py-3 flex items-center justify-between">
+        <!-- Brand & Mobile Menu Button -->
+        <div class="flex items-center space-x-3">
+            <button onclick="toggleMobileSidebar()" class="md:hidden w-10 h-10 rounded-xl glass-card flex items-center justify-center text-slate-700 dark:text-slate-200 active:scale-95 transition">
+                <i class="fa-solid fa-bars text-lg"></i>
+            </button>
+            
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-brand to-indigo-500 flex items-center justify-center text-white shadow-lg brand-glow transition-all duration-300">
+                    <i class="fa-solid fa-hard-drive text-xl"></i>
+                </div>
+                <div class="flex flex-col">
+                    <div class="flex items-center space-x-2">
+                        <span class="text-xl md:text-2xl font-black tracking-tight bg-gradient-to-r from-brand via-purple-500 to-indigo-500 bg-clip-text text-transparent">Z Storage</span>
+                        <span class="text-[10px] uppercase font-extrabold px-2 py-0.5 rounded-full bg-brand/15 text-brand border border-brand/30">release.ver</span>
+                    </div>
+                    <span class="text-[11px] font-medium text-slate-500 dark:text-slate-400 -mt-1 hidden sm:inline">Cloud Cloud Storage & Mod Center</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Desktop Search Bar -->
+        <div class="hidden md:flex items-center relative w-64 lg:w-96">
+            <i class="fa-solid fa-magnifying-glass absolute left-3.5 text-slate-400 text-sm"></i>
+            <input type="text" id="searchInput" placeholder="Tìm kiếm file, Mod Fabric, Shader..." class="w-full pl-10 pr-4 py-2 rounded-xl glass-card text-sm focus:outline-none focus:ring-2 focus:ring-brand border-transparent placeholder:text-slate-400 font-medium">
+        </div>
+
+        <!-- Controls: Customizer, Theme & User Profile -->
+        <div class="flex items-center space-x-2 md:space-x-3">
+            <button onclick="toggleCustomizer()" class="w-9 h-9 md:w-10 md:h-10 rounded-xl glass-card flex items-center justify-center text-slate-700 dark:text-slate-200 hover:text-brand active:scale-95 transition" title="Tùy chỉnh Giao diện & Font chữ">
+                <i class="fa-solid fa-palette text-base md:text-lg"></i>
+            </button>
+
+            <button onclick="toggleTheme()" id="themeToggleBtn" class="w-9 h-9 md:w-10 md:h-10 rounded-xl glass-card flex items-center justify-center text-slate-700 dark:text-slate-200 hover:text-amber-500 active:scale-95 transition" title="Chuyển đổi Dark/Light mode">
+                <i class="fa-solid fa-moon dark:hidden text-base md:text-lg"></i>
+                <i class="fa-solid fa-sun hidden dark:inline-block text-amber-400 text-base md:text-lg"></i>
+            </button>
+
+            <div class="flex items-center space-x-2 pl-2 border-l border-slate-300 dark:border-slate-800">
+                <div id="userAvatar" class="w-9 h-9 rounded-xl bg-brand text-white font-bold flex items-center justify-center text-xs ring-2 ring-brand/40 shadow-sm">
+                    ZS
+                </div>
+                <div class="hidden lg:block text-left">
+                    <p id="userNameDisplay" class="text-xs font-bold leading-tight">Đang kết nối...</p>
+                    <p id="userIdDisplay" class="text-[10px] text-brand font-semibold">Khách Anonymous</p>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="flex-1 flex flex-col md:flex-row max-w-7xl w-full mx-auto p-3 md:p-6 gap-6">
+        
+        <!-- Sidebar Navigation Drawer (Desktop & Mobile Drawer) -->
+        <div id="mobileSidebarOverlay" onclick="toggleMobileSidebar()" class="fixed inset-0 z-40 bg-slate-950/60 backdrop-blur-xs hidden md:hidden"></div>
+
+        <aside id="sidebarDrawer" class="fixed md:static top-0 left-0 bottom-0 z-50 md:z-auto w-72 md:w-64 glass-panel md:bg-transparent p-4 md:p-0 flex flex-col gap-5 shrink-0 -translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out md:transition-none h-full md:h-auto overflow-y-auto">
+            
+            <div class="flex items-center justify-between md:hidden pb-3 border-b border-slate-200 dark:border-slate-800">
+                <div class="flex items-center space-x-2">
+                    <div class="w-8 h-8 rounded-xl bg-brand text-white flex items-center justify-center font-bold text-xs">ZS</div>
+                    <span class="font-extrabold text-sm">Z Storage Menu</span>
+                </div>
+                <button onclick="toggleMobileSidebar()" class="w-8 h-8 rounded-full glass-card flex items-center justify-center text-slate-500">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <!-- Upload Modal Trigger Button -->
+            <button onclick="openUploadModal(); toggleMobileSidebar(false);" class="w-full py-3.5 px-4 rounded-2xl bg-gradient-to-r from-brand to-indigo-600 hover:from-brand-hover hover:to-indigo-700 text-white font-bold shadow-lg shadow-brand/30 flex items-center justify-center space-x-2.5 transition transform active:scale-95">
+                <i class="fa-solid fa-cloud-arrow-up text-lg"></i>
+                <span>Tải lên File / Mod</span>
+            </button>
+
+            <!-- Navigation Links Container -->
+            <div class="glass-panel rounded-2xl p-3 flex flex-col space-y-1">
+                <div class="px-3 py-1.5 text-[10px] font-extrabold uppercase tracking-wider text-slate-400">Chung</div>
+                
+                <button onclick="filterCategory('all'); toggleMobileSidebar(false);" id="nav-all" class="nav-btn w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-semibold transition bg-brand text-white shadow-md">
+                    <div class="flex items-center space-x-3">
+                        <i class="fa-solid fa-box-archive w-5 text-center"></i>
+                        <span>Tất cả File</span>
+                    </div>
+                    <span id="count-all" class="text-xs px-2 py-0.5 rounded-md bg-white/20 font-bold">0</span>
+                </button>
+                
+                <button onclick="filterCategory('image'); toggleMobileSidebar(false);" id="nav-image" class="nav-btn w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-semibold transition text-slate-700 dark:text-slate-300 hover:bg-slate-200/50 dark:hover:bg-slate-800/50">
+                    <div class="flex items-center space-x-3">
+                        <i class="fa-solid fa-images w-5 text-center text-emerald-500"></i>
+                        <span>Hình ảnh</span>
+                    </div>
+                    <span id="count-image" class="text-xs px-2 py-0.5 rounded-md bg-slate-200 dark:bg-slate-800 font-bold">0</span>
+                </button>
+
+                <button onclick="filterCategory('document'); toggleMobileSidebar(false);" id="nav-document" class="nav-btn w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-semibold transition text-slate-700 dark:text-slate-300 hover:bg-slate-200/50 dark:hover:bg-slate-800/50">
+                    <div class="flex items-center space-x-3">
+                        <i class="fa-solid fa-file-lines w-5 text-center text-amber-500"></i>
+                        <span>Tài liệu & Khác</span>
+                    </div>
+                    <span id="count-document" class="text-xs px-2 py-0.5 rounded-md bg-slate-200 dark:bg-slate-800 font-bold">0</span>
+                </button>
+
+                <!-- Minecraft Hub Category Sub-Section -->
+                <div class="pt-3 pb-1.5 px-3 text-[10px] font-extrabold uppercase tracking-wider text-brand">Minecraft Hub</div>
+
+                <button onclick="filterCategory('shader'); toggleMobileSidebar(false);" id="nav-shader" class="nav-btn w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-semibold transition text-slate-700 dark:text-slate-300 hover:bg-slate-200/50 dark:hover:bg-slate-800/50">
+                    <div class="flex items-center space-x-3">
+                        <i class="fa-solid fa-sun w-5 text-center text-amber-400"></i>
+                        <span>Shader Packs</span>
+                    </div>
+                    <span id="count-shader" class="text-xs px-2 py-0.5 rounded-md bg-slate-200 dark:bg-slate-800 font-bold">0</span>
+                </button>
+
+                <button onclick="filterCategory('resourcepack'); toggleMobileSidebar(false);" id="nav-resourcepack" class="nav-btn w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-semibold transition text-slate-700 dark:text-slate-300 hover:bg-slate-200/50 dark:hover:bg-slate-800/50">
+                    <div class="flex items-center space-x-3">
+                        <i class="fa-solid fa-paint-roller w-5 text-center text-cyan-500"></i>
+                        <span>Resource Pack</span>
+                    </div>
+                    <span id="count-resourcepack" class="text-xs px-2 py-0.5 rounded-md bg-slate-200 dark:bg-slate-800 font-bold">0</span>
+                </button>
+
+                <button onclick="filterCategory('modfabric'); toggleMobileSidebar(false);" id="nav-modfabric" class="nav-btn w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-semibold transition text-slate-700 dark:text-slate-300 hover:bg-slate-200/50 dark:hover:bg-slate-800/50">
+                    <div class="flex items-center space-x-3">
+                        <i class="fa-solid fa-cubes w-5 text-center text-indigo-500"></i>
+                        <span>Mod Fabric</span>
+                    </div>
+                    <span id="count-modfabric" class="text-xs px-2 py-0.5 rounded-md bg-slate-200 dark:bg-slate-800 font-bold">0</span>
+                </button>
+
+                <button onclick="filterCategory('modserver'); toggleMobileSidebar(false);" id="nav-modserver" class="nav-btn w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-semibold transition text-slate-700 dark:text-slate-300 hover:bg-slate-200/50 dark:hover:bg-slate-800/50">
+                    <div class="flex items-center space-x-3">
+                        <i class="fa-solid fa-server w-5 text-center text-rose-500"></i>
+                        <span>Mod Server</span>
+                    </div>
+                    <span id="count-modserver" class="text-xs px-2 py-0.5 rounded-md bg-slate-200 dark:bg-slate-800 font-bold">0</span>
+                </button>
+            </div>
+        </aside>
+
+        <main class="flex-1 flex flex-col gap-4 md:gap-6 min-w-0">
+            
+            <!-- Mobile Search Input Bar -->
+            <div class="flex md:hidden items-center relative w-full">
+                <i class="fa-solid fa-magnifying-glass absolute left-3.5 text-slate-400 text-sm"></i>
+                <input type="text" id="searchInputMobile" placeholder="Tìm kiếm file, mod..." class="w-full pl-10 pr-4 py-2.5 rounded-xl glass-card text-sm focus:outline-none focus:ring-2 focus:ring-brand border-transparent placeholder:text-slate-400 font-medium">
+            </div>
+
+            <!-- Header Title Bar & View Toggle -->
+            <div class="glass-panel rounded-2xl p-3.5 md:p-4 flex items-center justify-between gap-2">
+                <div>
+                    <h1 id="current-category-title" class="text-lg md:text-xl font-extrabold tracking-tight">Tất cả File</h1>
+                    <p id="current-category-desc" class="text-[11px] md:text-xs text-slate-500 dark:text-slate-400 font-medium truncate">Danh sách tổng hợp tài liệu, hình ảnh & Modpack Minecraft</p>
+                </div>
+                <div class="flex items-center space-x-1.5 md:space-x-2 shrink-0">
+                    <button onclick="setViewMode('grid')" id="view-grid-btn" class="p-2 md:p-2.5 rounded-xl bg-brand text-white text-xs md:text-sm shadow-md transition" title="Xem dạng lưới">
+                        <i class="fa-solid fa-grip"></i>
+                    </button>
+                    <button onclick="setViewMode('list')" id="view-list-btn" class="p-2 md:p-2.5 rounded-xl glass-card text-slate-700 dark:text-slate-200 text-xs md:text-sm shadow-sm transition" title="Xem dạng danh sách">
+                        <i class="fa-solid fa-list"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Files Grid Container -->
+            <div id="files-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-4">
+                <!-- Dynamic cards rendering -->
+            </div>
+
+            <!-- Empty State Display -->
+            <div id="empty-state" class="hidden flex-col items-center justify-center py-16 text-center glass-panel rounded-2xl p-6">
+                <div class="w-16 h-16 rounded-2xl bg-brand/15 text-brand flex items-center justify-center text-2xl mb-3 border border-brand/20">
+                    <i class="fa-solid fa-box-open"></i>
+                </div>
+                <h3 class="text-base font-bold">Chưa có tệp nào</h3>
+                <p class="text-xs text-slate-500 dark:text-slate-400 max-w-xs mt-1 mb-5 font-medium">Hãy chọn tab khác hoặc bấm tải lên file/Mod đầu tiên của bạn.</p>
+                <button onclick="openUploadModal()" class="px-5 py-2.5 rounded-xl bg-brand text-white font-bold text-xs shadow-lg shadow-brand/30 hover:bg-brand-hover transition">
+                    Tải lên file ngay
+                </button>
+            </div>
+        </main>
+    </div>
+
+    <!-- Mobile Navigation Bottom Bar -->
+    <div class="md:hidden fixed bottom-0 left-0 right-0 z-30 glass-panel border-t px-4 py-2 flex items-center justify-around">
+        <button onclick="filterCategory('all')" class="flex flex-col items-center space-y-0.5 text-brand">
+            <i class="fa-solid fa-box-archive text-base"></i>
+            <span class="text-[10px] font-bold">Tất cả</span>
+        </button>
+        <button onclick="filterCategory('modfabric')" class="flex flex-col items-center space-y-0.5 text-slate-500 dark:text-slate-400">
+            <i class="fa-solid fa-cubes text-base"></i>
+            <span class="text-[10px] font-bold">Fabric</span>
+        </button>
+        <button onclick="openUploadModal()" class="w-11 h-11 rounded-full bg-brand text-white flex items-center justify-center shadow-lg brand-glow -mt-5 transition active:scale-90">
+            <i class="fa-solid fa-plus text-lg"></i>
+        </button>
+        <button onclick="filterCategory('shader')" class="flex flex-col items-center space-y-0.5 text-slate-500 dark:text-slate-400">
+            <i class="fa-solid fa-sun text-base"></i>
+            <span class="text-[10px] font-bold">Shader</span>
+        </button>
+        <button onclick="toggleMobileSidebar()" class="flex flex-col items-center space-y-0.5 text-slate-500 dark:text-slate-400">
+            <i class="fa-solid fa-bars text-base"></i>
+            <span class="text-[10px] font-bold">Danh mục</span>
+        </button>
+    </div>
+
+    <!-- Upload Modal -->
+    <div id="uploadModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-slate-950/70 backdrop-blur-md p-4">
+        <div class="glass-panel w-full max-w-lg rounded-3xl p-5 md:p-6 shadow-2xl relative border">
+            <div class="flex items-center justify-between pb-3 border-b border-slate-200 dark:border-slate-800">
+                <h3 class="text-sm md:text-base font-bold flex items-center space-x-2">
+                    <i class="fa-solid fa-cloud-arrow-up text-brand"></i>
+                    <span>Tải lên File / Mod vào Cloud Cloud</span>
+                </h3>
+                <button onclick="closeUploadModal()" class="w-8 h-8 rounded-full glass-card flex items-center justify-center text-slate-500 hover:text-rose-500 transition">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <!-- Select Target Category -->
+            <div class="mt-4">
+                <label class="block text-xs font-semibold mb-1.5 text-slate-700 dark:text-slate-300">Phân Loại File:</label>
+                <select id="uploadCategorySelect" class="w-full px-3 py-2.5 rounded-xl glass-card text-xs md:text-sm focus:outline-none focus:ring-2 focus:ring-brand font-medium">
+                    <option value="modfabric" class="dark:bg-slate-900">Mod Fabric (.jar)</option>
+                    <option value="shader" class="dark:bg-slate-900">Shader Pack (.zip)</option>
+                    <option value="resourcepack" class="dark:bg-slate-900">Resource Pack (.zip)</option>
+                    <option value="modserver" class="dark:bg-slate-900">Mod Server / Modpack</option>
+                    <option value="document" class="dark:bg-slate-900">Tài liệu / File khác</option>
+                    <option value="image" class="dark:bg-slate-900">Hình ảnh (.png, .jpg)</option>
+                </select>
+            </div>
+
+            <!-- Drag & Drop Zone -->
+            <div id="dropzone" class="mt-4 border-2 border-dashed border-slate-300 dark:border-slate-700 hover:border-brand dark:hover:border-brand rounded-2xl p-5 md:p-6 text-center cursor-pointer transition bg-slate-50/50 dark:bg-slate-900/40 flex flex-col items-center justify-center space-y-2">
+                <div class="w-12 h-12 rounded-2xl bg-brand/10 text-brand flex items-center justify-center text-xl shadow-inner">
+                    <i class="fa-solid fa-file-arrow-up"></i>
+                </div>
+                <div>
+                    <p class="text-xs md:text-sm font-bold">Kéo thả <span class="text-brand">nhiều tệp</span> vào đây</p>
+                    <p class="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">Chấp nhận nhiều tệp cùng lúc</p>
+                </div>
+                <input type="file" id="fileInput" multiple class="hidden">
+            </div>
+
+            <!-- Queue Container -->
+            <div id="uploadQueue" class="mt-3 max-h-32 overflow-y-auto space-y-2 hidden"></div>
+
+            <div class="mt-5 flex justify-end space-x-2.5">
+                <button onclick="closeUploadModal()" class="px-4 py-2 rounded-xl glass-card text-xs font-semibold hover:bg-slate-200/50 dark:hover:bg-slate-800/50 transition">Hủy</button>
+                <button id="startUploadBtn" onclick="processUpload()" disabled class="px-5 py-2 rounded-xl bg-brand text-white text-xs font-bold shadow-md shadow-brand/30 opacity-50 cursor-not-allowed transition">Tải Lên Firebase</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Preview Modal -->
+    <div id="previewModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-slate-950/70 backdrop-blur-md p-4">
+        <div class="glass-panel w-full max-w-2xl rounded-3xl p-5 md:p-6 shadow-2xl relative flex flex-col max-h-[90vh]">
+            <div class="flex items-center justify-between pb-3 border-b border-slate-200 dark:border-slate-800">
+                <h3 id="preview-filename" class="text-sm md:text-base font-bold truncate pr-4">Preview</h3>
+                <button onclick="closePreviewModal()" class="w-8 h-8 rounded-full glass-card flex items-center justify-center text-slate-500 hover:text-rose-500 transition shrink-0">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <div id="preview-content" class="my-3 flex-1 flex items-center justify-center overflow-auto rounded-2xl bg-slate-900/10 dark:bg-slate-900/60 p-3 min-h-[180px]">
+                <!-- Preview image or data -->
+            </div>
+
+            <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 pt-3 border-t border-slate-200 dark:border-slate-800 text-xs">
+                <div class="flex flex-wrap gap-2 text-[11px] text-slate-500 dark:text-slate-400">
+                    <span>Size: <strong id="preview-size" class="text-slate-800 dark:text-slate-200">0 MB</strong></span>
+                    <span>• Type: <strong id="preview-type" class="text-slate-800 dark:text-slate-200">MOD</strong></span>
+                    <span>• Upload: <strong id="preview-date" class="text-slate-800 dark:text-slate-200">00/00/0000</strong></span>
+                </div>
+                <div class="flex space-x-2">
+                    <button id="preview-download-btn" class="flex-1 sm:flex-initial px-4 py-2 rounded-xl bg-brand text-white font-bold shadow-md shadow-brand/20 hover:bg-brand-hover transition flex items-center justify-center space-x-1.5">
+                        <i class="fa-solid fa-download"></i>
+                        <span>Tải về</span>
+                    </button>
+                    <button onclick="copyShareLink()" class="px-3 py-2 rounded-xl glass-card font-semibold hover:bg-slate-200/50 dark:hover:bg-slate-800/50 transition flex items-center justify-center space-x-1.5">
+                        <i class="fa-solid fa-link"></i>
+                        <span>Copy Link</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Customizer Modal -->
+    <div id="customizerModal" class="fixed inset-0 z-50 hidden items-center justify-end bg-slate-950/40 backdrop-blur-xs">
+        <div class="glass-panel w-full max-w-xs h-full p-5 shadow-2xl flex flex-col justify-between border-l border-white/20 dark:border-slate-800 overflow-y-auto">
+            <div>
+                <div class="flex items-center justify-between pb-3 border-b border-slate-200 dark:border-slate-800 mb-4">
+                    <h3 class="font-bold text-sm flex items-center space-x-2">
+                        <i class="fa-solid fa-palette text-brand"></i>
+                        <span>Tùy chỉnh Giao diện</span>
+                    </h3>
+                    <button onclick="toggleCustomizer()" class="w-8 h-8 rounded-full glass-card flex items-center justify-center text-slate-500 hover:text-rose-500 transition">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+
+                <!-- Theme Accent Picker -->
+                <div class="space-y-2">
+                    <label class="text-[10px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">Màu Accent</label>
+                    <div class="grid grid-cols-4 gap-2">
+                        <button onclick="setThemeColor('#8b5cf6', '#7c3aed', '#10b981')" class="w-10 h-10 rounded-xl bg-purple-500 shadow-md flex items-center justify-center text-white"><i class="fa-solid fa-check opacity-80 text-xs"></i></button>
+                        <button onclick="setThemeColor('#10b981', '#059669', '#3b82f6')" class="w-10 h-10 rounded-xl bg-emerald-500 shadow-md flex items-center justify-center text-white"><i class="fa-solid fa-check opacity-0 text-xs"></i></button>
+                        <button onclick="setThemeColor('#3b82f6', '#2563eb', '#8b5cf6')" class="w-10 h-10 rounded-xl bg-blue-500 shadow-md flex items-center justify-center text-white"><i class="fa-solid fa-check opacity-0 text-xs"></i></button>
+                        <button onclick="setThemeColor('#f43f5e', '#e11d48', '#f59e0b')" class="w-10 h-10 rounded-xl bg-rose-500 shadow-md flex items-center justify-center text-white"><i class="fa-solid fa-check opacity-0 text-xs"></i></button>
+                        <button onclick="setThemeColor('#f59e0b', '#d97706', '#10b981')" class="w-10 h-10 rounded-xl bg-amber-500 shadow-md flex items-center justify-center text-white"><i class="fa-solid fa-check opacity-0 text-xs"></i></button>
+                        <button onclick="setThemeColor('#06b6d4', '#0891b2', '#8b5cf6')" class="w-10 h-10 rounded-xl bg-cyan-500 shadow-md flex items-center justify-center text-white"><i class="fa-solid fa-check opacity-0 text-xs"></i></button>
+                    </div>
+                </div>
+
+                <!-- Font Family Selection -->
+                <div class="mt-5 space-y-2">
+                    <label class="text-[10px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">Kiểu Font Chữ</label>
+                    <div class="space-y-1.5">
+                        <button onclick="setFontFamily('Inter')" class="w-full text-left px-3 py-2 rounded-xl glass-card text-xs font-semibold hover:border-brand transition flex items-center justify-between">
+                            <span style="font-family: 'Inter', sans-serif;">Inter Standard</span>
+                            <i class="fa-solid fa-font text-brand text-xs"></i>
+                        </button>
+                        <button onclick="setFontFamily('Be Vietnam Pro')" class="w-full text-left px-3 py-2 rounded-xl glass-card text-xs font-semibold hover:border-brand transition flex items-center justify-between">
+                            <span style="font-family: 'Be Vietnam Pro', sans-serif;">Be Vietnam Pro</span>
+                            <i class="fa-solid fa-font text-brand text-xs"></i>
+                        </button>
+                        <button onclick="setFontFamily('Press Start 2P')" class="w-full text-left px-3 py-2 rounded-xl glass-card text-[9px] font-bold hover:border-brand transition flex items-center justify-between">
+                            <span style="font-family: 'Press Start 2P', monospace;">Press Start 2P</span>
+                            <i class="fa-solid fa-gamepad text-brand text-xs"></i>
+                        </button>
+                        <button onclick="setFontFamily('Silkscreen')" class="w-full text-left px-3 py-2 rounded-xl glass-card text-xs font-bold hover:border-brand transition flex items-center justify-between">
+                            <span style="font-family: 'Silkscreen', monospace;">Silkscreen Pixel</span>
+                            <i class="fa-solid fa-gamepad text-brand text-xs"></i>
+                        </button>
+                        <button onclick="setFontFamily('VT323')" class="w-full text-left px-3 py-2 rounded-xl glass-card text-sm font-bold hover:border-brand transition flex items-center justify-between">
+                            <span style="font-family: 'VT323', monospace;">VT323 Retro Arcade</span>
+                            <i class="fa-solid fa-gamepad text-brand text-xs"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pt-3 border-t border-slate-200 dark:border-slate-800 text-center mt-4">
+                <p class="text-[10px] font-semibold text-slate-500">Z Storage Platform • 2026</p>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, collection, onSnapshot, addDoc, deleteDoc, doc, setDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // Global Variables
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'z-storage-app';
+        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {
+            apiKey: "demo-key",
+            authDomain: "demo.firebaseapp.com",
+            projectId: "demo-project",
+            storageBucket: "demo.appspot.com",
+            messagingSenderId: "123456789",
+            appId: "1:123456789:web:abcdef"
+        };
+
+        let app, auth, db;
+        let currentUser = null;
+        let filesList = [];
+
+        window.currentCategory = 'all';
+        window.viewMode = 'grid';
+        window.searchQuery = '';
+        window.stagedFiles = [];
+        window.activePreviewFile = null;
+
+        // Initialize Firebase
+        try {
+            app = initializeApp(firebaseConfig);
+            auth = getAuth(app);
+            db = getFirestore(app);
+
+            // Auth flow
+            if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                signInWithCustomToken(auth, __initial_auth_token).catch(() => signInAnonymously(auth));
+            } else {
+                signInAnonymously(auth);
+            }
+
+            onAuthStateChanged(auth, (user) => {
+                if (user) {
+                    currentUser = user;
+                    const displayUid = user.uid.substring(0, 6).toUpperCase();
+                    document.getElementById('userNameDisplay').innerText = `User #${displayUid}`;
+                    document.getElementById('userIdDisplay').innerText = user.uid;
+                    document.getElementById('userAvatar').innerText = displayUid.substring(0, 2);
+
+                    // Subscribe to real-time public cloud collection
+                    subscribeCloudFiles();
+                }
+            });
+        } catch (err) {
+            console.warn('Firebase init fallback:', err);
+        }
+
+        // Subscribe to Firebase Public Data (RULE 1)
+        function subscribeCloudFiles() {
+            if (!db) return;
+            const publicColRef = collection(db, 'artifacts', appId, 'public', 'data', 'cloud_files');
+
+            onSnapshot(publicColRef, (snapshot) => {
+                filesList = [];
+                snapshot.forEach((docSnap) => {
+                    filesList.push({ id: docSnap.id, ...docSnap.data() });
+                });
+                renderFiles();
+            }, (error) => {
+                console.error("Firestore listener error:", error);
+            });
+        }
+
+        // Firebase Add Document Helper
+        window.saveFileToFirebase = async function(fileObj) {
+            if (!currentUser || !db) return;
+            try {
+                const publicColRef = collection(db, 'artifacts', appId, 'public', 'data', 'cloud_files');
+                await addDoc(publicColRef, fileObj);
+            } catch (e) {
+                console.error("Error saving file:", e);
+            }
+        };
+
+        // Firebase Delete Helper
+        window.deleteFileFromFirebase = async function(fileId) {
+            if (!currentUser || !db) return;
+            try {
+                const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'cloud_files', fileId);
+                await deleteDoc(docRef);
+                showNotification("Đã xóa file khỏi đám mây!");
+            } catch (e) {
+                console.error("Error deleting file:", e);
+            }
+        };
+
+        window.getFilesList = () => filesList;
+    </script>
+
+    <!-- Global App Functions -->
+    <script>
+        window.onload = function() {
+            loadSavedPreferences();
+            setupEventListeners();
+        };
+
+        function setupEventListeners() {
+            const searchInput = document.getElementById('searchInput');
+            const searchInputMobile = document.getElementById('searchInputMobile');
+
+            if (searchInput) searchInput.addEventListener('input', (e) => { searchQuery = e.target.value.toLowerCase(); renderFiles(); });
+            if (searchInputMobile) searchInputMobile.addEventListener('input', (e) => { searchQuery = e.target.value.toLowerCase(); renderFiles(); });
+
+            const dropzone = document.getElementById('dropzone');
+            const fileInput = document.getElementById('fileInput');
+
+            if (dropzone && fileInput) {
+                dropzone.addEventListener('click', () => fileInput.click());
+                dropzone.addEventListener('dragover', (e) => { e.preventDefault(); dropzone.classList.add('border-brand', 'bg-brand/10'); });
+                dropzone.addEventListener('dragleave', () => dropzone.classList.remove('border-brand', 'bg-brand/10'));
+                dropzone.addEventListener('drop', (e) => {
+                    e.preventDefault();
+                    dropzone.classList.remove('border-brand', 'bg-brand/10');
+                    if (e.dataTransfer.files.length > 0) handleSelectedFiles(e.dataTransfer.files);
+                });
+                fileInput.addEventListener('change', (e) => {
+                    if (e.target.files.length > 0) handleSelectedFiles(e.target.files);
+                });
+            }
+        }
+
+        function toggleMobileSidebar(forceState) {
+            const sidebar = document.getElementById('sidebarDrawer');
+            const overlay = document.getElementById('mobileSidebarOverlay');
+            if (forceState === false) {
+                sidebar.classList.add('-translate-x-full');
+                overlay.classList.add('hidden');
+            } else {
+                sidebar.classList.toggle('-translate-x-full');
+                overlay.classList.toggle('hidden');
+            }
+        }
+
+        function formatBytes(bytes) {
+            if (!bytes || bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + ' ' + sizes[i];
+        }
+
+        function handleSelectedFiles(fileList) {
+            stagedFiles = Array.from(fileList);
+            const queueContainer = document.getElementById('uploadQueue');
+            const startBtn = document.getElementById('startUploadBtn');
+
+            if (stagedFiles.length > 0) {
+                queueContainer.classList.remove('hidden');
+                startBtn.disabled = false;
+                startBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+
+                queueContainer.innerHTML = stagedFiles.map(f => `
+                    <div class="flex items-center justify-between p-2 rounded-xl glass-card text-xs">
+                        <div class="flex items-center space-x-2 truncate">
+                            <i class="fa-solid fa-file-arrow-up text-brand"></i>
+                            <span class="truncate font-medium">${f.name}</span>
+                        </div>
+                        <span class="text-slate-500 font-semibold shrink-0">${formatBytes(f.size)}</span>
+                    </div>
+                `).join('');
+            }
+        }
+
+        async function processUpload() {
+            if (stagedFiles.length === 0) return;
+            const selectedCat = document.getElementById('uploadCategorySelect').value;
+            const now = new Date();
+            const dateStr = `${String(now.getDate()).padStart(2, '0')}/${String(now.getMonth() + 1).padStart(2, '0')}/${now.getFullYear()} ${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+
+            for (const file of stagedFiles) {
+                let fType = selectedCat;
+                if (file.type.startsWith('image/') && selectedCat !== 'image') fType = 'image';
+
+                // Convert file data to Base64 data URL for persistence
+                const reader = new FileReader();
+                reader.onload = async function(e) {
+                    const fileObj = {
+                        name: file.name,
+                        type: fType,
+                        size: formatBytes(file.size),
+                        date: dateStr,
+                        timestamp: Date.now(),
+                        dataUrl: fType === 'image' ? e.target.result : '',
+                        content: `Tệp: ${file.name}\nPhân loại: ${fType.toUpperCase()}\nUpload lúc: ${dateStr}`
+                    };
+
+                    if (window.saveFileToFirebase) {
+                        await window.saveFileToFirebase(fileObj);
+                    }
+                };
+                reader.readAsDataURL(file);
+            }
+
+            stagedFiles = [];
+            closeUploadModal();
+            showNotification('Đã tải tệp lên cloud!');
+        }
+
+        function renderFiles() {
+            const files = window.getFilesList ? window.getFilesList() : [];
+            const container = document.getElementById('files-container');
+            const emptyState = document.getElementById('empty-state');
+
+            let filtered = files.filter(f => {
+                const matchesCat = currentCategory === 'all' || f.type === currentCategory;
+                const matchesSearch = f.name.toLowerCase().includes(searchQuery);
+                return matchesCat && matchesSearch;
+            });
+
+            // Update badges
+            const setBadge = (id, cat) => {
+                const el = document.getElementById(id);
+                if (el) el.innerText = files.filter(f => (cat === 'all' || f.type === cat) && f.name.toLowerCase().includes(searchQuery)).length;
+            };
+
+            setBadge('count-all', 'all');
+            setBadge('count-image', 'image');
+            setBadge('count-document', 'document');
+            setBadge('count-shader', 'shader');
+            setBadge('count-resourcepack', 'resourcepack');
+            setBadge('count-modfabric', 'modfabric');
+            setBadge('count-modserver', 'modserver');
+
+            if (filtered.length === 0) {
+                container.innerHTML = '';
+                emptyState.classList.remove('hidden');
+                emptyState.classList.add('flex');
+                return;
+            }
+
+            emptyState.classList.add('hidden');
+            emptyState.classList.remove('flex');
+
+            if (viewMode === 'grid') {
+                container.className = "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-4";
+                container.innerHTML = filtered.map(file => {
+                    let previewBlock = '';
+                    if (file.type === 'image' && file.dataUrl) {
+                        previewBlock = `<div class="h-32 rounded-xl overflow-hidden bg-slate-200 dark:bg-slate-800 relative mb-2.5">
+                            <img src="${file.dataUrl}" alt="${file.name}" class="w-full h-full object-cover">
+                        </div>`;
+                    } else {
+                        let iconClass = 'fa-file-lines text-amber-500';
+                        let badgeText = 'File';
+                        let badgeStyle = 'bg-amber-500/15 text-amber-500 border-amber-500/30';
+
+                        if (file.type === 'shader') { iconClass = 'fa-sun text-amber-400'; badgeText = 'Shader'; badgeStyle = 'bg-amber-500/15 text-amber-400 border-amber-500/30'; }
+                        else if (file.type === 'resourcepack') { iconClass = 'fa-paint-roller text-cyan-400'; badgeText = 'Resource'; badgeStyle = 'bg-cyan-500/15 text-cyan-400 border-cyan-500/30'; }
+                        else if (file.type === 'modfabric') { iconClass = 'fa-cubes text-indigo-400'; badgeText = 'Fabric'; badgeStyle = 'bg-indigo-500/15 text-indigo-400 border-indigo-500/30'; }
+                        else if (file.type === 'modserver') { iconClass = 'fa-server text-rose-400'; badgeText = 'Server'; badgeStyle = 'bg-rose-500/15 text-rose-400 border-rose-500/30'; }
+
+                        previewBlock = `<div class="h-32 rounded-xl overflow-hidden bg-slate-100 dark:bg-slate-900/60 flex flex-col items-center justify-center text-3xl mb-2.5 border border-slate-200/60 dark:border-slate-800 relative">
+                            <i class="fa-solid ${iconClass}"></i>
+                            <span class="absolute top-2 right-2 text-[9px] font-extrabold px-2 py-0.5 rounded-full border ${badgeStyle}">${badgeText}</span>
+                        </div>`;
+                    }
+
+                    return `
+                        <div class="glass-card rounded-2xl p-3.5 flex flex-col justify-between transition-all duration-300">
+                            <div>
+                                ${previewBlock}
+                                <h4 class="font-bold text-xs md:text-sm truncate" title="${file.name}">${file.name}</h4>
+                                <div class="flex items-center justify-between mt-2 text-[10px] font-medium text-slate-500 dark:text-slate-400 border-t border-slate-200/50 dark:border-slate-800/50 pt-2">
+                                    <span><i class="fa-solid fa-hard-drive mr-1"></i>${file.size}</span>
+                                    <span><i class="fa-regular fa-clock mr-1"></i>${file.date}</span>
+                                </div>
+                            </div>
+                            <div class="mt-3 pt-2.5 border-t border-slate-200/50 dark:border-slate-800/50 flex items-center justify-between">
+                                <button onclick="openPreview('${file.id}')" class="px-3 py-1.5 rounded-xl bg-brand/15 text-brand hover:bg-brand hover:text-white text-xs font-bold transition flex items-center space-x-1">
+                                    <i class="fa-solid fa-eye"></i>
+                                    <span>Xem</span>
+                                </button>
+                                <div class="flex space-x-1.5">
+                                    <button onclick="downloadFile('${file.id}')" class="w-8 h-8 rounded-xl glass-card flex items-center justify-center text-slate-600 dark:text-slate-300 hover:text-brand transition"><i class="fa-solid fa-download text-xs"></i></button>
+                                    <button onclick="deleteFile('${file.id}')" class="w-8 h-8 rounded-xl glass-card flex items-center justify-center text-slate-600 dark:text-slate-300 hover:text-rose-500 transition"><i class="fa-solid fa-trash text-xs"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            } else {
+                container.className = "flex flex-col gap-2";
+                container.innerHTML = filtered.map(file => {
+                    let iconClass = 'fa-file-lines text-amber-500';
+                    if (file.type === 'shader') iconClass = 'fa-sun text-amber-400';
+                    if (file.type === 'resourcepack') iconClass = 'fa-paint-roller text-cyan-500';
+                    if (file.type === 'modfabric') iconClass = 'fa-cubes text-indigo-500';
+                    if (file.type === 'modserver') iconClass = 'fa-server text-rose-500';
+                    if (file.type === 'image') iconClass = 'fa-image text-emerald-500';
+
+                    return `
+                        <div class="glass-card rounded-2xl p-3 flex items-center justify-between gap-3">
+                            <div class="flex items-center space-x-3 truncate">
+                                <div class="w-9 h-9 rounded-xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-base shrink-0">
+                                    <i class="fa-solid ${iconClass}"></i>
+                                </div>
+                                <div class="truncate">
+                                    <h4 class="font-bold text-xs md:text-sm truncate">${file.name}</h4>
+                                    <p class="text-[10px] font-medium text-slate-500 dark:text-slate-400">${file.size} • ${file.date}</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center space-x-1.5 shrink-0">
+                                <button onclick="openPreview('${file.id}')" class="px-2.5 py-1 rounded-xl bg-brand/15 text-brand hover:bg-brand hover:text-white text-xs font-bold transition">Xem</button>
+                                <button onclick="downloadFile('${file.id}')" class="w-7 h-7 rounded-xl glass-card flex items-center justify-center text-slate-600 dark:text-slate-300 hover:text-brand transition"><i class="fa-solid fa-download text-xs"></i></button>
+                                <button onclick="deleteFile('${file.id}')" class="w-7 h-7 rounded-xl glass-card flex items-center justify-center text-slate-600 dark:text-slate-300 hover:text-rose-500 transition"><i class="fa-solid fa-trash text-xs"></i></button>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            }
+        }
+
+        function filterCategory(cat) {
+            currentCategory = cat;
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.className = "nav-btn w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-semibold transition text-slate-700 dark:text-slate-300 hover:bg-slate-200/50 dark:hover:bg-slate-800/50";
+                const spanBadge = btn.querySelector('span:last-child');
+                if (spanBadge) spanBadge.className = "text-xs px-2 py-0.5 rounded-md bg-slate-200 dark:bg-slate-800 font-bold";
+            });
+
+            const activeBtn = document.getElementById(`nav-${cat}`);
+            if (activeBtn) {
+                activeBtn.className = "nav-btn w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-semibold transition bg-brand text-white shadow-md";
+                const activeBadge = activeBtn.querySelector('span:last-child');
+                if (activeBadge) activeBadge.className = "text-xs px-2 py-0.5 rounded-md bg-white/20 font-bold";
+            }
+
+            const titles = {
+                all: { title: 'Tất cả File', desc: 'Toàn bộ tệp tin, shader & mod Minecraft' },
+                image: { title: 'Hình ảnh', desc: 'Bộ sưu tập ảnh chụp màn hình game' },
+                document: { title: 'Tài liệu', desc: 'Văn bản, ghi chú và tài liệu hướng dẫn' },
+                shader: { title: 'Shader Packs', desc: 'Các gói đồ họa và ánh sáng thực tế' },
+                resourcepack: { title: 'Resource Pack', desc: 'Các gói thay đổi giao diện block' },
+                modfabric: { title: 'Mod Fabric', desc: 'Danh sách mod chạy trên Fabric' },
+                modserver: { title: 'Mod Server', desc: 'Modpack tối ưu cho máy chủ Minecraft' }
+            };
+
+            document.getElementById('current-category-title').innerText = titles[cat].title;
+            document.getElementById('current-category-desc').innerText = titles[cat].desc;
+
+            renderFiles();
+        }
+
+        function setViewMode(mode) {
+            viewMode = mode;
+            const gridBtn = document.getElementById('view-grid-btn');
+            const listBtn = document.getElementById('view-list-btn');
+
+            if (mode === 'grid') {
+                gridBtn.className = "p-2 md:p-2.5 rounded-xl bg-brand text-white text-xs md:text-sm shadow-md transition";
+                listBtn.className = "p-2 md:p-2.5 rounded-xl glass-card text-slate-700 dark:text-slate-200 text-xs md:text-sm shadow-sm transition";
+            } else {
+                listBtn.className = "p-2 md:p-2.5 rounded-xl bg-brand text-white text-xs md:text-sm shadow-md transition";
+                gridBtn.className = "p-2 md:p-2.5 rounded-xl glass-card text-slate-700 dark:text-slate-200 text-xs md:text-sm shadow-sm transition";
+            }
+            renderFiles();
+        }
+
+        function openUploadModal() {
+            document.getElementById('uploadModal').classList.remove('hidden');
+            document.getElementById('uploadModal').classList.add('flex');
+        }
+
+        function closeUploadModal() {
+            document.getElementById('uploadModal').classList.add('hidden');
+            document.getElementById('uploadModal').classList.remove('flex');
+            stagedFiles = [];
+            document.getElementById('uploadQueue').classList.add('hidden');
+            document.getElementById('startUploadBtn').disabled = true;
+            document.getElementById('startUploadBtn').classList.add('opacity-50', 'cursor-not-allowed');
+        }
+
+        function openPreview(id) {
+            const files = window.getFilesList ? window.getFilesList() : [];
+            const file = files.find(f => f.id === id);
+            if (!file) return;
+            activePreviewFile = file;
+
+            document.getElementById('preview-filename').innerText = file.name;
+            document.getElementById('preview-size').innerText = file.size;
+            document.getElementById('preview-type').innerText = file.type.toUpperCase();
+            document.getElementById('preview-date').innerText = file.date;
+
+            const contentArea = document.getElementById('preview-content');
+            if (file.type === 'image' && file.dataUrl) {
+                contentArea.innerHTML = `<img src="${file.dataUrl}" alt="${file.name}" class="max-h-[280px] rounded-xl object-contain shadow-md">`;
+            } else {
+                contentArea.innerHTML = `<div class="w-full text-left font-mono text-xs p-3 rounded-xl bg-slate-900 text-slate-200 border border-slate-800 overflow-x-auto whitespace-pre-wrap">${file.content || 'Thông tin chi tiết Mod Z Storage...'}</div>`;
+            }
+
+            document.getElementById('preview-download-btn').setAttribute('onclick', `downloadFile('${file.id}')`);
+
+            document.getElementById('previewModal').classList.remove('hidden');
+            document.getElementById('previewModal').classList.add('flex');
+        }
+
+        function closePreviewModal() {
+            document.getElementById('previewModal').classList.add('hidden');
+            document.getElementById('previewModal').classList.remove('flex');
+            activePreviewFile = null;
+        }
+
+        function toggleCustomizer() {
+            const modal = document.getElementById('customizerModal');
+            if (modal.classList.contains('hidden')) {
+                modal.classList.remove('hidden');
+                modal.classList.add('flex');
+            } else {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+            }
+        }
+
+        function toggleTheme() {
+            const html = document.documentElement;
+            if (html.classList.contains('dark')) {
+                html.classList.remove('dark');
+                localStorage.setItem('z_theme', 'light');
+            } else {
+                html.classList.add('dark');
+                localStorage.setItem('z_theme', 'dark');
+            }
+        }
+
+        function setThemeColor(color, hoverColor, lightColor) {
+            document.documentElement.style.setProperty('--brand-color', color);
+            document.documentElement.style.setProperty('--brand-hover', hoverColor);
+            localStorage.setItem('z_brand_color', color);
+            localStorage.setItem('z_brand_hover', hoverColor);
+            showNotification('Đã lưu màu giao diện!');
+        }
+
+        function setFontFamily(fontName) {
+            document.documentElement.style.setProperty('--font-family', `'${fontName}', monospace, sans-serif`);
+            localStorage.setItem('z_font_name', fontName);
+            showNotification(`Đã đổi font chữ sang: ${fontName}`);
+        }
+
+        function loadSavedPreferences() {
+            const savedTheme = localStorage.getItem('z_theme');
+            if (savedTheme === 'light') document.documentElement.classList.remove('dark');
+            else document.documentElement.classList.add('dark');
+
+            const savedColor = localStorage.getItem('z_brand_color');
+            const savedHover = localStorage.getItem('z_brand_hover');
+            if (savedColor) {
+                document.documentElement.style.setProperty('--brand-color', savedColor);
+                document.documentElement.style.setProperty('--brand-hover', savedHover);
+            }
+
+            const savedFontName = localStorage.getItem('z_font_name');
+            if (savedFontName) {
+                document.documentElement.style.setProperty('--font-family', `'${savedFontName}', monospace, sans-serif`);
+            }
+        }
+
+        function deleteFile(id) {
+            if (window.deleteFileFromFirebase) {
+                window.deleteFileFromFirebase(id);
+            }
+        }
+
+        function downloadFile(id) {
+            const files = window.getFilesList ? window.getFilesList() : [];
+            const file = files.find(f => f.id === id);
+            if (!file) return;
+
+            if (file.dataUrl) {
+                const a = document.createElement('a');
+                a.href = file.dataUrl;
+                a.download = file.name;
+                a.click();
+            } else {
+                showNotification(`Đang chuẩn bị tải: ${file.name}`);
+            }
+        }
+
+        function copyShareLink() {
+            if (!activePreviewFile) return;
+            const link = `https://zstorage.cloud/share/${activePreviewFile.id}`;
+            document.execCommand('copy');
+            showNotification('Đã sao chép liên kết chia sẻ!');
+        }
+
+        function showNotification(msg) {
+            const toast = document.createElement('div');
+            toast.className = "fixed bottom-16 md:bottom-6 right-4 md:right-6 z-50 glass-panel px-4 py-2.5 rounded-2xl shadow-2xl flex items-center space-x-2.5 text-xs font-bold border border-brand/40 text-slate-800 dark:text-slate-100 animate-bounce";
+            toast.innerHTML = `<i class="fa-solid fa-circle-check text-brand text-base"></i><span>${msg}</span>`;
+            document.body.appendChild(toast);
+            setTimeout(() => toast.remove(), 2800);
+        }
+    </script>
+</body>
+</html>
